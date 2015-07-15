@@ -1,2 +1,4 @@
 # go-roman
-Library to manipulate roman numbers for Golang.
+Golang library to manipulate roman numbers.
+
+**Note:** Still a work in progress!
