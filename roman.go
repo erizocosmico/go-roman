@@ -29,9 +29,9 @@ var (
 
 func getNextLowerSymbol(symbols []RomanSymbol, currentIndex int) RomanSymbol {
 	var current = symbols[currentIndex]
-	if current != D && current != L && current != V && currentIndex+2 < len(symbols) {
+	if current != D && current != L && current != V && current != I {
 		return symbols[currentIndex+2]
-	} else if (current == L || current == V) && currentIndex+1 < len(symbols) {
+	} else if current == D || current == L || current == V {
 		return symbols[currentIndex+1]
 	}
 
