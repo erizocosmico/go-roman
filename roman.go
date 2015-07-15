@@ -5,6 +5,7 @@ import "errors"
 // RomanSymbol is the representation of one of the symbols
 // used to represent a roman number
 type RomanSymbol int
+
 // RomanNumber represents a sequence of valid RomanSymbols
 type RomanNumber []RomanSymbol
 
@@ -20,10 +21,22 @@ const (
 )
 
 var (
+	orderedSymbols     = []RomanSymbol{M, D, C, L, X, V, I}
 	emptyNumber        = []RomanSymbol{}
 	invalidCharError   = errors.New("invalid character given")
 	invalidStringError = errors.New("invalid roman number string passed")
 )
+
+func getNextLowerSymbol(symbols []RomanSymbol, currentIndex int) RomanSymbol {
+	var current = symbols[currentIndex]
+	if current != D && current != L && current != V && currentIndex+2 < len(symbols) {
+		return symbols[currentIndex+2]
+	} else if (current == L || current == V) && currentIndex+1 < len(symbols) {
+		return symbols[currentIndex+1]
+	}
+
+	return O
+}
 
 // IsValid returns true only if the sequence of RomanSymbols contained in the number is a
 // valid roman number
@@ -39,9 +52,24 @@ func (n RomanNumber) Value() int32 {
 }
 
 // FromInt returns the RomanNumber value of the given number
-func FromInt(i int32) (RomanNumber, error) {
-	// TODO: Implement
-	return emptyNumber, nil
+func FromInt(n int32) RomanNumber {
+	var num []RomanSymbol
+
+	for i, sym := range orderedSymbols {
+		for n >= int32(sym) {
+			n = n - int32(sym)
+			num = append(num, sym)
+		}
+
+		nextLowerSym := getNextLowerSymbol(orderedSymbols, i)
+		if nextLowerSym != O && n >= int32(sym)-int32(nextLowerSym) {
+			n = n - int32(sym) + int32(nextLowerSym)
+			num = append(num, nextLowerSym)
+			num = append(num, sym)
+		}
+	}
+
+	return RomanNumber(num)
 }
 
 // FromString returns the RomanNumber after parsing the given string

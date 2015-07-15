@@ -203,7 +203,7 @@ func TestFromInt(t *testing.T) {
 		{rn("XC"), int32(90)},
 		{rn("CC"), int32(200)},
 		{rn("CCC"), int32(300)},
-		{rn("D"), int32(5)},
+		{rn("D"), int32(500)},
 		{rn("M"), int32(1000)},
 		{rn("MM"), int32(2000)},
 		{rn("MMM"), int32(3000)},
@@ -213,8 +213,8 @@ func TestFromInt(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		n, _ := FromInt(c.num)
-		if !reflect.DeepEqual(c, c.result) {
+		n := FromInt(c.num)
+		if !reflect.DeepEqual(n, c.result) {
 			t.Errorf("expected %v to be %v", n, c.result)
 		}
 	}
