@@ -164,7 +164,7 @@ func TestValue(t *testing.T) {
 		{rn("XC"), int32(90)},
 		{rn("CC"), int32(200)},
 		{rn("CCC"), int32(300)},
-		{rn("D"), int32(5)},
+		{rn("D"), int32(500)},
 		{rn("M"), int32(1000)},
 		{rn("MM"), int32(2000)},
 		{rn("MMM"), int32(3000)},

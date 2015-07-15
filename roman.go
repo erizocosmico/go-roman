@@ -47,8 +47,19 @@ func (n RomanNumber) IsValid() bool {
 
 // Value returns the int32 value of the roman number
 func (n RomanNumber) Value() int32 {
-	// TODO: Implement
-	return int32(0)
+	var value int32
+	syms := []RomanSymbol(n)
+	length := len(syms)
+
+	for i, sym := range syms {
+		if i+1 < length && syms[i+1] > sym {
+			value -= int32(sym)
+		} else {
+			value += int32(sym)
+		}
+	}
+
+	return value
 }
 
 // FromInt returns the RomanNumber value of the given number
