@@ -161,7 +161,7 @@ func SymbolFromRune(r rune) (RomanSymbol, error) {
 		return M, nil
 	}
 
-	return O, errors.New("invalid character given")
+	return O, invalidCharError
 }
 
 // SymbolFromString returns the RomanSymbol that matches
