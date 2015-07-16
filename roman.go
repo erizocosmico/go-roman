@@ -27,11 +27,21 @@ var (
 	invalidStringError = errors.New("invalid roman number string passed")
 )
 
+func symbolOrder(symbols []RomanSymbol, symbol RomanSymbol) int {
+	for i, s := range symbols {
+		if symbol == s {
+			return i
+		}
+	}
+
+	return 0
+}
+
 func getNextLowerSymbol(symbols []RomanSymbol, currentIndex int) RomanSymbol {
 	var current = symbols[currentIndex]
 	if current != D && current != L && current != V && current != I {
 		return symbols[currentIndex+2]
-	} else if current == D || current == L || current == V {
+	} else if current != I {
 		return symbols[currentIndex+1]
 	}
 
@@ -41,7 +51,35 @@ func getNextLowerSymbol(symbols []RomanSymbol, currentIndex int) RomanSymbol {
 // IsValid returns true only if the sequence of RomanSymbols contained in the number is a
 // valid roman number
 func (n RomanNumber) IsValid() bool {
-	// TODO: Implement
+	var (
+		syms = []RomanSymbol(n)
+		length = len(syms)
+		repeated int
+		prevSym RomanSymbol = O
+	)
+
+	for i, sym := range syms {
+		if prevSym != sym {
+			repeated = 0
+		} else {
+			repeated++
+		}
+
+		// A symbol can be repeated up to 3 times except M
+		isTooRepeated := repeated > 2 && sym != M
+		// L, D and V can't repeate more than once
+		isRepeatedAndShouldnt := repeated > 0 && (sym == L || sym == D || sym == V)
+		// N cant be lower than N+1 unless N can be subtracted from N+1
+		isValidSubtractor := length > i+1 && sym < syms[i+1] && repeated == 0 && getNextLowerSymbol(orderedSymbols, symbolOrder(orderedSymbols, syms[i+1])) == sym
+		isSubtractor := length > i+1 && sym < syms[i+1]
+
+		if isTooRepeated || isRepeatedAndShouldnt || (!isValidSubtractor && isSubtractor) || (!isValidSubtractor && sym < prevSym && prevSym != O && isSubtractor) || (isValidSubtractor && length > i+2 && sym == syms[i+2]) || (i-2 >= 0 && syms[i-2] < sym) {
+			return false
+		}
+
+		prevSym = sym
+	}
+
 	return true
 }
 

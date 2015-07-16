@@ -74,9 +74,21 @@ func TestFromString(t *testing.T) {
 	}
 }
 
+// Copied from FromString since FromString checks if it's valid
+// and we want to create some invalid numbers
 func rn(s string) RomanNumber {
-	r, _ := FromString(s)
-	return r
+	var num = make([]RomanSymbol, len(s))
+
+	for i, c := range s {
+		sym, err := SymbolFromRune(c)
+		if err != nil {
+			return emptyNumber
+		}
+
+		num[i] = sym
+	}
+
+	return num
 }
 
 func TestIsValid(t *testing.T) {
@@ -95,7 +107,7 @@ func TestIsValid(t *testing.T) {
 		{rn("VI"), true},
 		{rn("VII"), true},
 		{rn("VIII"), true},
-		{rn("VIIII"), true},
+		{rn("VIIII"), false},
 		{rn("IX"), true},
 		{rn("IXI"), false},
 		{rn("XVI"), true},
@@ -127,7 +139,8 @@ func TestIsValid(t *testing.T) {
 		{rn("VM"), false},
 		{rn("IM"), false},
 		{rn("IMVX"), false},
-		{rn("XXI"), false},
+		{rn("XXI"), true},
+		{rn("XCM"), false},
 		{rn("MCMXLV"), true},
 	}
 
